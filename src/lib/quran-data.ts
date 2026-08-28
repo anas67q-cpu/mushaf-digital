@@ -1,5 +1,4 @@
 import surahsJson from "@/data/surahs.json";
-import juzsJson from "@/data/juzs.json";
 
 export type Surah = {
   id: number;
@@ -13,20 +12,23 @@ export type Surah = {
 
 export const SURAHS = surahsJson as unknown as Surah[];
 
-export const JUZS = juzsJson as unknown as { id: number; first: [string, string] }[];
-
-export const surahName = (id: number) =>
-  `سورة ${SURAHS.find((s) => s.id === id)?.name ?? ""}`.trim();
+/** Standard Madani mushaf juz start pages. */
+export const JUZ_PAGES = [
+  1, 22, 42, 62, 82, 102, 121, 142, 162, 182, 201, 222, 242, 262, 282, 302, 322, 342, 362, 382, 402,
+  422, 442, 462, 482, 502, 522, 542, 562, 582,
+];
 
 export const surahById = (id: number) => SURAHS.find((s) => s.id === id);
 
-export const juzStartPage = (juz: number) => {
-  const j = JUZS.find((x) => x.id === juz);
-  if (!j) return 1;
-  const surah = surahById(Number(j.first[0]));
-  return surah ? surah.pages[0] : 1;
+export const surahName = (id: number) => `سورة ${surahById(id)?.name ?? ""}`.trim();
+
+export const juzOfPage = (page: number) => {
+  let juz = 1;
+  JUZ_PAGES.forEach((p, i) => {
+    if (page >= p) juz = i + 1;
+  });
+  return juz;
 };
 
-/** Approximate juz for a page (juz n spans 20 pages starting at page 2). */
-export const juzOfPage = (page: number) =>
-  page <= 1 ? 1 : Math.min(30, Math.floor((page - 2) / 20) + 1);
+export const surahOfPage = (page: number) =>
+  SURAHS.filter((s) => s.pages[0] <= page && s.pages[1] >= page);
