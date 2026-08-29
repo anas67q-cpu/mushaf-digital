@@ -13,11 +13,11 @@ import { HIGHLIGHT_COLORS, toArabicNumber, type AyahBox } from "@/lib/mushaf";
 import { surahById, surahName } from "@/lib/quran-data";
 import { TAFSIRS, fetchAyah, fetchTafsir, stripHtml, type AyahInfo } from "@/lib/quran-api";
 import { buildAyahImage, shareOrDownload } from "@/lib/share-image";
-import type { Bookmark, Highlight } from "@/lib/reader-store";
+import type { Highlight } from "@/lib/reader-store";
 
 type Props = {
   selection: { ayah: AyahBox; page: number };
-  highlight?: Highlight;
+  highlight?: Highlight | undefined;
   isBookmarked: boolean;
   onClose: () => void;
   onHighlight: (colorId: string) => void;

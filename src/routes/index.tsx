@@ -202,7 +202,7 @@ function Reader() {
         </button>
         <div className="min-w-0 text-center">
           <h1 className="truncate font-naskh text-lg font-bold text-foreground">
-            {pageSurahs.length ? surahName(pageSurahs[0].id) : "المصحف الشريف"}
+            {pageSurahs[0] ? surahName(pageSurahs[0].id) : "المصحف الشريف"}
           </h1>
           <p className="truncate text-xs text-muted-foreground">
             الجزء {toArabicNumber(juzOfPage(rightPage))} • صفحة {toArabicNumber(rightPage)}

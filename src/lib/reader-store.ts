@@ -16,7 +16,7 @@ export type Bookmark = {
   surahName: string;
   ayah: number;
   page: number;
-  color?: string;
+  color?: string | undefined;
   createdAt: number;
 };
 
