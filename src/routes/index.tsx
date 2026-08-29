@@ -235,16 +235,14 @@ function Reader() {
         onPointerCancel={onPointerUp}
       >
         <div
-          dir="ltr"
-          className="flex w-[300%] px-2 py-3"
+          className="px-2 py-3"
           style={{
-            transform: `translateX(calc(-33.3333% + ${dx}px))`,
-            transition: animating ? "transform 220ms ease-out" : "none",
+            transform: `translateX(${dx}px)`,
+            opacity: Math.max(0.35, 1 - Math.abs(dx) / (window.innerWidth || 1) / 0.55),
+            transition: animating ? "transform 200ms ease-out, opacity 200ms ease-out" : "none",
           }}
         >
-          <div className="w-1/3 shrink-0 px-1">{slideContent(page - step)}</div>
-          <div className="w-1/3 shrink-0 px-1">{slideContent(page)}</div>
-          <div className="w-1/3 shrink-0 px-1">{slideContent(page + step)}</div>
+          {slideContent(page)}
         </div>
       </main>
 
