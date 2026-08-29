@@ -76,13 +76,19 @@ function Reader() {
 
   const slide = useCallback(
     (dir: 1 | -1) => {
+      const w = window.innerWidth;
       setAnimating(true);
-      setDx(dir === 1 ? -window.innerWidth : window.innerWidth);
+      setDx(dir === 1 ? -w * 0.4 : w * 0.4);
       window.setTimeout(() => {
         setAnimating(false);
-        setDx(0);
+        setDx(dir === 1 ? w * 0.4 : -w * 0.4);
         go(page + dir * step);
-      }, 220);
+        requestAnimationFrame(() => {
+          setAnimating(true);
+          setDx(0);
+          window.setTimeout(() => setAnimating(false), 240);
+        });
+      }, 180);
     },
     [go, page, step],
   );
