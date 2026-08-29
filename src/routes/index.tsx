@@ -228,6 +228,7 @@ function Reader() {
         onPointerCancel={onPointerUp}
       >
         <div
+          dir="ltr"
           className="flex w-[300%] px-2 py-3"
           style={{
             transform: `translateX(calc(-33.3333% + ${dx}px))`,
