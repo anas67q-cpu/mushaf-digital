@@ -42,9 +42,18 @@ export function AyahSheet({
   const [sharing, setSharing] = useState(false);
 
   useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  useEffect(() => {
     setInfo(null);
     fetchAyah(surah, ayah).then(setInfo);
   }, [surah, ayah]);
+
 
   useEffect(() => {
     let alive = true;
