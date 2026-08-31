@@ -89,8 +89,7 @@ export function MushafPageView({ page, highlights, selected, onSelectAyah }: Pro
         alt={`صفحة المصحف رقم ${page}`}
         draggable={false}
         onLoad={() => setLoaded(true)}
-        className="pointer-events-none relative h-full w-full select-none object-contain"
-        style={{ mixBlendMode: "multiply" }}
+        className="mushaf-img pointer-events-none relative h-full w-full select-none object-contain"
       />
       {!loaded && (
         <div className="absolute inset-0 grid place-items-center bg-parchment">

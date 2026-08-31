@@ -135,8 +135,8 @@ function Reader() {
     }
     const deltaX = e.clientX - d.x;
     const threshold = Math.min(110, window.innerWidth * 0.16);
-    if (deltaX < -threshold) next();
-    else if (deltaX > threshold) prev();
+    if (deltaX > threshold) next();
+    else if (deltaX < -threshold) prev();
     else {
       setAnimating(true);
       setDx(0);
