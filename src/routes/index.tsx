@@ -180,9 +180,9 @@ function Reader() {
   const spreadFor = (base: number) => {
     const right = base % 2 === 1 ? base : base - 1;
     return (
-      <div className="flex w-full items-start justify-center gap-3 lg:gap-5">
-        <div className="w-1/2 max-w-[46vh]">{renderPage(right + 1)}</div>
-        <div className="w-1/2 max-w-[46vh]">{renderPage(right)}</div>
+      <div className="flex w-full items-center justify-center gap-3 lg:gap-5">
+        <div className="w-1/2 max-w-[min(48%,47vh)]">{renderPage(right + 1)}</div>
+        <div className="w-1/2 max-w-[min(48%,47vh)]">{renderPage(right)}</div>
       </div>
     );
   };
@@ -191,10 +191,11 @@ function Reader() {
     spread ? (
       spreadFor(base)
     ) : (
-      <div className="mx-auto w-full max-w-[min(100%,52vh)] sm:max-w-[min(560px,60vh)]">
+      <div className="mx-auto w-full max-w-[min(100%,52vh)] sm:max-w-[min(620px,56vh)]">
         {renderPage(base)}
       </div>
     );
+
 
   return (
     <div dir="rtl" className="flex h-[100svh] flex-col bg-background">
@@ -235,7 +236,8 @@ function Reader() {
         onPointerCancel={onPointerUp}
       >
         <div
-          className="px-2 py-3"
+          className="flex min-h-full items-center justify-center px-2 py-3"
+
           style={{
             transform: `translateX(${dx}px)`,
             opacity: Math.max(0.35, 1 - Math.abs(dx) / (window.innerWidth || 1) / 0.55),
