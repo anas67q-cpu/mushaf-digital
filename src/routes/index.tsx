@@ -236,7 +236,8 @@ function Reader() {
         onPointerCancel={onPointerUp}
       >
         <div
-          className="px-2 py-3"
+          className="flex min-h-full items-center justify-center px-2 py-3"
+
           style={{
             transform: `translateX(${dx}px)`,
             opacity: Math.max(0.35, 1 - Math.abs(dx) / (window.innerWidth || 1) / 0.55),
