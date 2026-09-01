@@ -181,9 +181,16 @@ function Reader() {
   const spreadFor = (base: number) => {
     const right = base % 2 === 1 ? base : base - 1;
     return (
-      <div className="flex w-full items-center justify-center gap-3 lg:gap-5">
-        <div className="w-1/2 max-w-[min(48%,47vh)]">{renderPage(right + 1)}</div>
-        <div className="w-1/2 max-w-[min(48%,47vh)]">{renderPage(right)}</div>
+      <div
+        className="flex w-full items-center justify-center gap-3 lg:gap-5"
+        onClick={onBackgroundClick}
+      >
+        <div className="w-1/2 max-w-[min(48%,47vh)]" onClick={onBackgroundClick}>
+          {renderPage(right + 1)}
+        </div>
+        <div className="w-1/2 max-w-[min(48%,47vh)]" onClick={onBackgroundClick}>
+          {renderPage(right)}
+        </div>
       </div>
     );
   };
@@ -192,7 +199,10 @@ function Reader() {
     spread ? (
       spreadFor(base)
     ) : (
-      <div className="mx-auto w-full max-w-[min(100%,52vh)] sm:max-w-[min(620px,56vh)]">
+      <div
+        className="mx-auto w-full max-w-[min(100%,52vh)] sm:max-w-[min(620px,56vh)]"
+        onClick={onBackgroundClick}
+      >
         {renderPage(base)}
       </div>
     );
