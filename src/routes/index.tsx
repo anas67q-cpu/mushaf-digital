@@ -140,6 +140,7 @@ function Reader() {
   const onPointerUp = (e: React.PointerEvent) => {
     const d = dragRef.current;
     dragRef.current = null;
+    suppressClickRef.current = Boolean(d?.horizontal);
     if (!d?.active || !d.horizontal) {
       setDx(0);
       return;
