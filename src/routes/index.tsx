@@ -45,6 +45,16 @@ function Reader() {
     null,
   );
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const suppressClickRef = useRef(false);
+
+  const onBackgroundClick = (e: React.MouseEvent) => {
+    if (e.target !== e.currentTarget) return;
+    if (suppressClickRef.current) {
+      suppressClickRef.current = false;
+      return;
+    }
+    setImmersive((v) => !v);
+  };
 
   const store = useReaderStore();
 
