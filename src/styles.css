@@ -171,3 +171,17 @@
   -webkit-user-select: none;
   -webkit-touch-callout: none;
 }
+
+@utility mushaf-img {
+  mix-blend-mode: multiply;
+}
+
+/* Dark mode: invert the printed page so the script is white on a black page. */
+.dark .mushaf-img {
+  mix-blend-mode: screen;
+  filter: invert(1) brightness(1.05) contrast(1.05);
+}
+
+.dark .page-frame {
+  background-color: oklch(0.13 0.008 60);
+}
