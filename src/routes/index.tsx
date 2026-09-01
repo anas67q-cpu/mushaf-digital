@@ -226,6 +226,7 @@ function Reader() {
           {dark ? <Sun className="size-5" /> : <Moon className="size-5" />}
         </button>
       </header>
+      )}
 
       <main
         ref={scrollerRef}
@@ -236,10 +237,11 @@ function Reader() {
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
+        onClick={onBackgroundClick}
       >
         <div
           className="flex min-h-full items-center justify-center px-2 py-3"
-
+          onClick={onBackgroundClick}
           style={{
             transform: `translateX(${dx}px)`,
             opacity: Math.max(0.35, 1 - Math.abs(dx) / (window.innerWidth || 1) / 0.55),
@@ -249,6 +251,7 @@ function Reader() {
           {slideContent(page)}
         </div>
       </main>
+
 
       <footer className="z-20 grid shrink-0 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border-t border-border bg-card/90 px-3 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] backdrop-blur">
         <button
