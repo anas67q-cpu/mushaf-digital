@@ -291,6 +291,7 @@ function Reader() {
           <ChevronLeft className="size-5" />
         </button>
       </footer>
+      )}
 
       {selection && (
         <AyahSheet
