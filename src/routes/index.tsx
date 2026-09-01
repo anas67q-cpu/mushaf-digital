@@ -38,6 +38,7 @@ function Reader() {
   const [dark, setDark] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selection, setSelection] = useState<Selection | null>(null);
+  const [immersive, setImmersive] = useState(false);
   const [dx, setDx] = useState(0);
   const [animating, setAnimating] = useState(false);
   const dragRef = useRef<{ x: number; y: number; active: boolean; horizontal: boolean } | null>(
