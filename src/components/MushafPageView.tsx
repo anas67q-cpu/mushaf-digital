@@ -25,6 +25,7 @@ export function MushafPageView({ page, highlights, selected, onSelectAyah, onEmp
   const [boxes, setBoxes] = useState<PageBoxes | null>(null);
   const [loaded, setLoaded] = useState(false);
   const frameRef = useRef<HTMLDivElement>(null);
+  const downRef = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -79,7 +80,13 @@ export function MushafPageView({ page, highlights, selected, onSelectAyah, onEmp
       dir="rtl"
       className="page-frame no-tap-highlight relative mx-auto w-full overflow-hidden rounded-xl ring-1 ring-border"
       style={{ aspectRatio: `${PAGE_W} / ${PAGE_H}` }}
-      onClick={(e) => handleTap(e.clientX, e.clientY)}
+      onPointerDown={(e) => (downRef.current = { x: e.clientX, y: e.clientY })}
+      onClick={(e) => {
+        const d = downRef.current;
+        downRef.current = null;
+        if (d && (Math.abs(e.clientX - d.x) > 10 || Math.abs(e.clientY - d.y) > 10)) return;
+        handleTap(e.clientX, e.clientY);
+      }}
       role="presentation"
     >
       {overlays}
