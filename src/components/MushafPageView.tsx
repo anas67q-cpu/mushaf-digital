@@ -18,9 +18,10 @@ type Props = {
   highlights: Record<string, Highlight>;
   selected: { surah: number; ayah: number } | null;
   onSelectAyah: (ayah: AyahBox, page: number) => void;
+  onEmptyTap?: () => void;
 };
 
-export function MushafPageView({ page, highlights, selected, onSelectAyah }: Props) {
+export function MushafPageView({ page, highlights, selected, onSelectAyah, onEmptyTap }: Props) {
   const [boxes, setBoxes] = useState<PageBoxes | null>(null);
   const [loaded, setLoaded] = useState(false);
   const frameRef = useRef<HTMLDivElement>(null);
@@ -43,6 +44,7 @@ export function MushafPageView({ page, highlights, selected, onSelectAyah }: Pro
     const y = ((clientY - rect.top) / rect.height) * PAGE_H;
     const hit = hitTest(boxes, x, y);
     if (hit) onSelectAyah(hit, page);
+    else onEmptyTap?.();
   };
 
   const overlays = boxes

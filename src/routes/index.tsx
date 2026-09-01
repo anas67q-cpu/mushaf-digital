@@ -184,6 +184,7 @@ function Reader() {
         highlights={store.highlights}
         selected={selection ? { surah: selection.ayah.s, ayah: selection.ayah.a } : null}
         onSelectAyah={selectAyah}
+        onEmptyTap={() => setImmersive((v) => !v)}
       />
     ) : (
       <div key={`empty-${p}`} />
