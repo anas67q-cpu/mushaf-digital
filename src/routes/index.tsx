@@ -200,6 +200,7 @@ function Reader() {
 
   return (
     <div dir="rtl" className="flex h-[100svh] flex-col bg-background">
+      {!immersive && (
       <header className="z-20 grid shrink-0 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border-b border-border bg-card/90 px-3 py-2 backdrop-blur">
         <button
           onClick={() => setDrawerOpen(true)}
