@@ -38,12 +38,23 @@ function Reader() {
   const [dark, setDark] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selection, setSelection] = useState<Selection | null>(null);
+  const [immersive, setImmersive] = useState(false);
   const [dx, setDx] = useState(0);
   const [animating, setAnimating] = useState(false);
   const dragRef = useRef<{ x: number; y: number; active: boolean; horizontal: boolean } | null>(
     null,
   );
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const suppressClickRef = useRef(false);
+
+  const onBackgroundClick = (e: React.MouseEvent) => {
+    if (e.target !== e.currentTarget) return;
+    if (suppressClickRef.current) {
+      suppressClickRef.current = false;
+      return;
+    }
+    setImmersive((v) => !v);
+  };
 
   const store = useReaderStore();
 
@@ -129,6 +140,7 @@ function Reader() {
   const onPointerUp = (e: React.PointerEvent) => {
     const d = dragRef.current;
     dragRef.current = null;
+    suppressClickRef.current = Boolean(d?.horizontal);
     if (!d?.active || !d.horizontal) {
       setDx(0);
       return;
@@ -172,6 +184,7 @@ function Reader() {
         highlights={store.highlights}
         selected={selection ? { surah: selection.ayah.s, ayah: selection.ayah.a } : null}
         onSelectAyah={selectAyah}
+        onEmptyTap={() => setImmersive((v) => !v)}
       />
     ) : (
       <div key={`empty-${p}`} />
@@ -180,9 +193,16 @@ function Reader() {
   const spreadFor = (base: number) => {
     const right = base % 2 === 1 ? base : base - 1;
     return (
-      <div className="flex w-full items-center justify-center gap-3 lg:gap-5">
-        <div className="w-1/2 max-w-[min(48%,47vh)]">{renderPage(right + 1)}</div>
-        <div className="w-1/2 max-w-[min(48%,47vh)]">{renderPage(right)}</div>
+      <div
+        className="flex w-full items-center justify-center gap-3 lg:gap-5"
+        onClick={onBackgroundClick}
+      >
+        <div className="w-1/2 max-w-[min(48%,47vh)]" onClick={onBackgroundClick}>
+          {renderPage(right + 1)}
+        </div>
+        <div className="w-1/2 max-w-[min(48%,47vh)]" onClick={onBackgroundClick}>
+          {renderPage(right)}
+        </div>
       </div>
     );
   };
@@ -191,7 +211,10 @@ function Reader() {
     spread ? (
       spreadFor(base)
     ) : (
-      <div className="mx-auto w-full max-w-[min(100%,52vh)] sm:max-w-[min(620px,56vh)]">
+      <div
+        className="mx-auto w-full max-w-[min(100%,52vh)] sm:max-w-[min(620px,56vh)]"
+        onClick={onBackgroundClick}
+      >
         {renderPage(base)}
       </div>
     );
@@ -199,6 +222,7 @@ function Reader() {
 
   return (
     <div dir="rtl" className="flex h-[100svh] flex-col bg-background">
+      {!immersive && (
       <header className="z-20 grid shrink-0 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border-b border-border bg-card/90 px-3 py-2 backdrop-blur">
         <button
           onClick={() => setDrawerOpen(true)}
@@ -224,6 +248,7 @@ function Reader() {
           {dark ? <Sun className="size-5" /> : <Moon className="size-5" />}
         </button>
       </header>
+      )}
 
       <main
         ref={scrollerRef}
@@ -234,10 +259,11 @@ function Reader() {
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
+        onClick={onBackgroundClick}
       >
         <div
           className="flex min-h-full items-center justify-center px-2 py-3"
-
+          onClick={onBackgroundClick}
           style={{
             transform: `translateX(${dx}px)`,
             opacity: Math.max(0.35, 1 - Math.abs(dx) / (window.innerWidth || 1) / 0.55),
@@ -248,6 +274,8 @@ function Reader() {
         </div>
       </main>
 
+
+      {!immersive && (
       <footer className="z-20 grid shrink-0 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border-t border-border bg-card/90 px-3 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] backdrop-blur">
         <button
           onClick={prev}
@@ -275,6 +303,7 @@ function Reader() {
           <ChevronLeft className="size-5" />
         </button>
       </footer>
+      )}
 
       {selection && (
         <AyahSheet

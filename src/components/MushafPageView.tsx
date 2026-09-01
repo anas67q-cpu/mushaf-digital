@@ -18,12 +18,14 @@ type Props = {
   highlights: Record<string, Highlight>;
   selected: { surah: number; ayah: number } | null;
   onSelectAyah: (ayah: AyahBox, page: number) => void;
+  onEmptyTap?: () => void;
 };
 
-export function MushafPageView({ page, highlights, selected, onSelectAyah }: Props) {
+export function MushafPageView({ page, highlights, selected, onSelectAyah, onEmptyTap }: Props) {
   const [boxes, setBoxes] = useState<PageBoxes | null>(null);
   const [loaded, setLoaded] = useState(false);
   const frameRef = useRef<HTMLDivElement>(null);
+  const downRef = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -43,6 +45,7 @@ export function MushafPageView({ page, highlights, selected, onSelectAyah }: Pro
     const y = ((clientY - rect.top) / rect.height) * PAGE_H;
     const hit = hitTest(boxes, x, y);
     if (hit) onSelectAyah(hit, page);
+    else onEmptyTap?.();
   };
 
   const overlays = boxes
@@ -56,7 +59,7 @@ export function MushafPageView({ page, highlights, selected, onSelectAyah }: Pro
           <span
             key={`${key}-${i}`}
             aria-hidden
-            className="pointer-events-none absolute rounded-[4px] transition-opacity"
+            className="ayah-highlight pointer-events-none absolute rounded-[4px] transition-opacity"
             style={{
               right: `${((PAGE_W - (r[0] + r[2])) / PAGE_W) * 100}%`,
               top: `${(r[1] / PAGE_H) * 100}%`,
@@ -64,7 +67,6 @@ export function MushafPageView({ page, highlights, selected, onSelectAyah }: Pro
               height: `${(r[3] / PAGE_H) * 100}%`,
               backgroundColor: bg,
               opacity: isSelected && !hl ? 0.75 : 1,
-              mixBlendMode: "multiply",
               outline: isSelected ? "1.5px solid var(--gold)" : undefined,
             }}
           />
@@ -78,7 +80,13 @@ export function MushafPageView({ page, highlights, selected, onSelectAyah }: Pro
       dir="rtl"
       className="page-frame no-tap-highlight relative mx-auto w-full overflow-hidden rounded-xl ring-1 ring-border"
       style={{ aspectRatio: `${PAGE_W} / ${PAGE_H}` }}
-      onClick={(e) => handleTap(e.clientX, e.clientY)}
+      onPointerDown={(e) => (downRef.current = { x: e.clientX, y: e.clientY })}
+      onClick={(e) => {
+        const d = downRef.current;
+        downRef.current = null;
+        if (d && (Math.abs(e.clientX - d.x) > 10 || Math.abs(e.clientY - d.y) > 10)) return;
+        handleTap(e.clientX, e.clientY);
+      }}
       role="presentation"
     >
       {overlays}
