@@ -56,7 +56,7 @@ export function MushafPageView({ page, highlights, selected, onSelectAyah }: Pro
           <span
             key={`${key}-${i}`}
             aria-hidden
-            className="pointer-events-none absolute rounded-[4px] transition-opacity"
+            className="ayah-highlight pointer-events-none absolute rounded-[4px] transition-opacity"
             style={{
               right: `${((PAGE_W - (r[0] + r[2])) / PAGE_W) * 100}%`,
               top: `${(r[1] / PAGE_H) * 100}%`,
@@ -64,7 +64,6 @@ export function MushafPageView({ page, highlights, selected, onSelectAyah }: Pro
               height: `${(r[3] / PAGE_H) * 100}%`,
               backgroundColor: bg,
               opacity: isSelected && !hl ? 0.75 : 1,
-              mixBlendMode: "multiply",
               outline: isSelected ? "1.5px solid var(--gold)" : undefined,
             }}
           />

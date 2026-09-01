@@ -176,10 +176,19 @@
   mix-blend-mode: multiply;
 }
 
+@utility ayah-highlight {
+  mix-blend-mode: multiply;
+}
+
 /* Dark mode: invert the printed page so the script is white on a black page. */
 .dark .mushaf-img {
   mix-blend-mode: screen;
   filter: invert(1) brightness(1.05) contrast(1.05);
+}
+
+.dark .ayah-highlight {
+  mix-blend-mode: normal;
+  opacity: 0.4 !important;
 }
 
 .dark .page-frame {
