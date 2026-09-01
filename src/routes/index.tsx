@@ -263,6 +263,7 @@ function Reader() {
       </main>
 
 
+      {!immersive && (
       <footer className="z-20 grid shrink-0 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border-t border-border bg-card/90 px-3 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] backdrop-blur">
         <button
           onClick={prev}
