@@ -40,7 +40,6 @@ function Reader() {
   const [selection, setSelection] = useState<Selection | null>(null);
   const [immersive, setImmersive] = useState(false);
   const [dx, setDx] = useState(0);
-  const [animating, setAnimating] = useState(false);
   const dragRef = useRef<{ x: number; y: number; active: boolean; horizontal: boolean } | null>(
     null,
   );
@@ -85,29 +84,12 @@ function Reader() {
     [],
   );
 
-  const slide = useCallback(
-    (dir: 1 | -1) => {
-      const w = window.innerWidth;
-      setAnimating(true);
-      // RTL page turn: exiting page moves to the left for forward, right for back
-      setDx(dir === 1 ? -w * 0.4 : w * 0.4);
-      window.setTimeout(() => {
-        setAnimating(false);
-        // New page enters from the same RTL side (left for forward, right for back)
-        setDx(dir === 1 ? -w * 0.4 : w * 0.4);
-        go(page + dir * step);
-        requestAnimationFrame(() => {
-          setAnimating(true);
-          setDx(0);
-          window.setTimeout(() => setAnimating(false), 240);
-        });
-      }, 180);
-    },
-    [go, page, step],
-  );
-
-  const next = useCallback(() => page + step <= TOTAL_PAGES && slide(1), [page, step, slide]);
-  const prev = useCallback(() => page > 1 && slide(-1), [page, slide]);
+  const next = useCallback(() => {
+    if (page + step <= TOTAL_PAGES) go(page + step);
+  }, [go, page, step]);
+  const prev = useCallback(() => {
+    if (page > 1) go(page - step);
+  }, [go, page, step]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -149,13 +131,9 @@ function Reader() {
     }
     const deltaX = e.clientX - d.x;
     const threshold = Math.min(110, window.innerWidth * 0.16);
+    setDx(0);
     if (deltaX > threshold) next();
     else if (deltaX < -threshold) prev();
-    else {
-      setAnimating(true);
-      setDx(0);
-      window.setTimeout(() => setAnimating(false), 200);
-    }
   };
 
   const rightPage = spread ? (page % 2 === 1 ? page : page - 1) : page;
@@ -269,7 +247,7 @@ function Reader() {
           style={{
             transform: `translateX(${dx}px)`,
             opacity: Math.max(0.35, 1 - Math.abs(dx) / (window.innerWidth || 1) / 0.55),
-            transition: animating ? "transform 200ms ease-out, opacity 200ms ease-out" : "none",
+            transition: "none",
           }}
         >
           {slideContent(page)}
