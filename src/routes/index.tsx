@@ -89,10 +89,12 @@ function Reader() {
     (dir: 1 | -1) => {
       const w = window.innerWidth;
       setAnimating(true);
+      // RTL page turn: exiting page moves to the left for forward, right for back
       setDx(dir === 1 ? -w * 0.4 : w * 0.4);
       window.setTimeout(() => {
         setAnimating(false);
-        setDx(dir === 1 ? w * 0.4 : -w * 0.4);
+        // New page enters from the same RTL side (left for forward, right for back)
+        setDx(dir === 1 ? -w * 0.4 : w * 0.4);
         go(page + dir * step);
         requestAnimationFrame(() => {
           setAnimating(true);
